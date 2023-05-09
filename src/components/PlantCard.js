@@ -1,10 +1,15 @@
 import React,{useState} from "react";
 
-function PlantCard({plant, deletePlant}) {
+function PlantCard({plant, deletePlant, handleUpdate}) {
   const [button, setButton] = useState(true)
+  const [newPrice, setNewPrice] = useState(plant.price)
   
   function handleButton() {
     setButton(prevButton => !prevButton)
+  }
+
+  function changePrice(e) {
+    setNewPrice(e.target.value)
   }
 
   function handleDelete() {
@@ -12,32 +17,37 @@ function PlantCard({plant, deletePlant}) {
       method: 'DELETE',
     })
     .then(res => res.json())
-    .then((plant) => deletePlant(plant))
+    .then(() => {
+      deletePlant(plant.id)
+    })
   }
 
-  // function handleUpdate() {
-  //   fetch(`http://localhost:6001/plants/${plant.id}`, {
-  //     mehtod: 'PATCH',
-  //     headers: { 'Content-Type': 'application/json'},
-  //     body: JSON.stringify({
-  //       'price': newPrice
-  //     })
-  //     .then(res => res.json())
-  //     .then((price) => {
-  //     })
-  //   })
-  // }
+  function handleSubmit(e) {
+    e.preventDefault()
+    fetch(`http://localhost:6001/plants/${plant.id}`, {
+      method: 'PATCH',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        price: parseFloat(newPrice)
+      }) 
+    })
+    .then(response => response.json())
+    .then((price) => {
+      handleUpdate(price)
+    })
+  }
 
   return (
     <li className="card">
       <img src={plant.image} alt={plant.name} />
       <h4>{plant.name}</h4>
       <p>Price: {plant.price}</p>
-      <input
-        type="text"
-        id="new-price"
-        placeholder="New Price"
-      />
+      <form onSubmit={e => handleSubmit(e)}>
+        <input onChange={e => changePrice(e)} value={newPrice} type="number" step="0.01" name="price" placeholder="new price" />
+        <input type="submit" value="Submit" />
+      </form>
       <button className={button? "primary": ""} onClick={handleButton}>{button? "In Stock": "Out of Stock"}</button>
       <button onClick={handleDelete}>Delete</button>
     </li>

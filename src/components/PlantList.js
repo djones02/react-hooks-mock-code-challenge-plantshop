@@ -1,9 +1,9 @@
 import React from "react";
 import PlantCard from "./PlantCard";
 
-function PlantList({plants, deletePlant, updatePlant}) {
+function PlantList({plants, deletePlant, handleUpdate}) {
   const plantMap = plants.map((plant) => {
-    return <PlantCard updatePlant={updatePlant} deletePlant={deletePlant} key={plant.id} plant={plant}/>
+    return <PlantCard handleUpdate={handleUpdate} deletePlant={deletePlant} key={plant.id} plant={plant}/>
   })
 
   return (

@@ -15,7 +15,7 @@ function PlantPage() {
   }, [])
 
   function deletePlant(deletedPlant) {
-    const newPlantList = plants.filter(plant => plant.id !== deletedPlant.id)
+    const newPlantList = plants.filter(plant => plant.id !== deletedPlant)
     setPlants(newPlantList)
   }
 
@@ -27,8 +27,8 @@ function PlantPage() {
     setSearch(e.target.value)
   }
 
-  function updatePlant(updatedPlant) {
-    const newPlantPrice = plants.map(plant => plant.id === updatedPlant.id? updatedPlant: plant)
+  function handleUpdate(updatedPlant) {
+    const newPlantPrice = plants.map((plant) => plant.id === updatedPlant.id? updatedPlant: plant)
     setPlants(newPlantPrice)
   }
 
@@ -39,8 +39,8 @@ function PlantPage() {
   return (
     <main>
       <NewPlantForm addPlant={addPlant}/>
-      <Search handleSearch={handleSearch}/>
-      <PlantList updatePlant={updatePlant} plants={searchedPlant} deletePlant={deletePlant}/>
+      <Search handleSearch={handleSearch} search={search}/>
+      <PlantList handleUpdate={handleUpdate} plants={searchedPlant} deletePlant={deletePlant}/>
     </main>
   );
 }
